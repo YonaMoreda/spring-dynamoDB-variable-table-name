@@ -30,34 +30,12 @@ public class DynamoDBConfig {
 
     @Value("${props.env}")
     private String environment;
-//    @Autowired
-//    public void setContext(ApplicationContext context) {
-//        this.context = context;
-//    }
-
-//    private ApplicationContext context;
-
-//    @Bean
-//    public DynamoDBMapper mapper() {
-//        return new DynamoDBMapper(amazonDynamoDB());
-//    }
-
-//    @Bean(name = "mvcHandlerMappingIntrospectorCustom")
-//    public HandlerMappingIntrospector mvcHandlerMappingIntrospectorCustom() {
-//        return new HandlerMappingIntrospector(context);
-//    }
 
     @Bean
     public AmazonDynamoDB amazonDynamoDB() {
         AmazonDynamoDB amazonDynamoDB = new AmazonDynamoDBClient(amazonAWSCredentials());
         amazonDynamoDB.setEndpoint(awsDynamoDBEndPoint);
         return amazonDynamoDB;
-
-//        return AmazonDynamoDBClientBuilder.standard()
-//                .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(awsDynamoDBEndPoint, "us-east-2"))
-//                .withRegion(Regions.US_EAST_2)
-//                .withCredentials(new AWSStaticCredentialsProvider(new BasicAWSCredentials(awsAccessKey, awsSecretKey)))
-//                .build();
     }
 
     @Bean
@@ -65,6 +43,10 @@ public class DynamoDBConfig {
         return new BasicAWSCredentials(awsAccessKey, awsSecretKey);
     }
 
+    /**
+     * Adding prefix for table name happens here
+     * @return
+     */
     @Bean
     public DynamoDBMapperConfig dynamoDBMapperConfig(DynamoDBMapperConfig.TableNameOverride tableNameOverrider) {
         DynamoDBMapperConfig.Builder builder = new DynamoDBMapperConfig.Builder();
@@ -73,6 +55,7 @@ public class DynamoDBConfig {
         builder.withTableNameOverride(tableNameOverrider());
         return builder.build();
     }
+
 
     @Bean
     public DynamoDBMapperConfig.TableNameOverride tableNameOverrider() {
